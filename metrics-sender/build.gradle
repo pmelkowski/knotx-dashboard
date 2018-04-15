@@ -14,16 +14,38 @@
  * limitations under the License.
  */
 plugins {
-    id 'java'
+    id 'java-library'
+    id "io.spring.dependency-management"
 }
+apply from: "${rootProject.projectDir}/annotation-processing.gradle"
 
-ext {
-    vertxVersion = '3.5.0'
+description = "Metrics Sender"
+
+dependencyManagement {
+    imports {
+        mavenBom "io.knotx:knotx-dependencies:${knotxVersion}"
+    }
 }
 
 dependencies {
-    compile "io.vertx:vertx-core:${vertxVersion}"
-    compile "io.vertx:vertx-dropwizard-metrics:${vertxVersion}"
-    compile "io.vertx:vertx-rx-java2:${vertxVersion}"
+    compile "io.vertx:vertx-core"
+    compile "io.vertx:vertx-codegen"
+    compile "io.vertx:vertx-rx-java2"
+    compile "io.vertx:vertx-dropwizard-metrics"
     compile 'com.codahale.metrics:metrics-graphite:3.0.2'
+}
+
+compileJava {
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+
+    dependsOn annotationProcessing
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += 'src/main/generated'
+        }
+    }
 }

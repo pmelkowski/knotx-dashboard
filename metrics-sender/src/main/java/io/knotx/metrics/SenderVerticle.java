@@ -6,7 +6,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
-import io.knotx.metrics.MetricsSenderConfiguration.GraphiteConfiguration;
+import io.knotx.metrics.graphite.GraphiteOptions;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
@@ -19,32 +19,32 @@ public class SenderVerticle extends AbstractVerticle {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SenderVerticle.class);
 
-  private MetricsSenderConfiguration configuration;
+  private MetricsSenderOptions options;
 
   @Override
   public void init(Vertx vertx, Context context) {
     super.init(vertx, context);
-    configuration = new MetricsSenderConfiguration(config());
+    options = new MetricsSenderOptions(config());
   }
 
   @Override
   public void start() throws Exception {
     LOGGER.info("Starting <{}>", this.getClass().getSimpleName());
-    LOGGER.debug("Metrics config: {}", configuration);
+    LOGGER.debug("Metrics config: {}", options);
 
     MetricRegistry dropwizardRegistry = SharedMetricRegistries.getOrCreate(
         System.getProperty("vertx.metrics.options.registryName")
     );
-    final GraphiteConfiguration graphiteConfiguration = configuration.getGraphite();
+    final GraphiteOptions graphiteOptions = options.getGraphite();
     final Graphite graphite = new Graphite(
-        new InetSocketAddress(graphiteConfiguration.getAddress(), graphiteConfiguration.getPort()));
+        new InetSocketAddress(graphiteOptions.getAddress(), graphiteOptions.getPort()));
     final GraphiteReporter reporter = GraphiteReporter.forRegistry(dropwizardRegistry)
-        .prefixedWith(configuration.getPrefix())
+        .prefixedWith(options.getPrefix())
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)
         .filter(MetricFilter.ALL)
         .build(graphite);
-    reporter.start(configuration.getPollsPeriod(), TimeUnit.SECONDS);
+    reporter.start(options.getPollsPeriod(), TimeUnit.MILLISECONDS);
   }
 
   @Override

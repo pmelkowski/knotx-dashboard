@@ -1,0 +1,39 @@
+{
+  "enabled": true,
+  "registryName": "knotx-dw",
+  "monitoredHttpClientEndpoints": [ ],
+  "monitoredEventBusHandlers": [
+    {
+      "alias": "HttpRepositoryConnector",
+      "value": "knotx.core.repository.http"
+    },
+    {
+      "alias": "FilesystemRepositoryConnector",
+      "value": "knotx.core.repository.filesystem"
+    },
+    {
+      "alias": "FragmentSplitter",
+      "value": "knotx.core.splitter"
+    },
+    {
+      "alias": "FragmentAssembler",
+      "value": "knotx.core.assembler"
+    },
+    {
+      "alias": "ServiceKnot",
+      "value": "knotx.knot.service"
+    },
+    {
+      "alias": "ActionKnot",
+      "value": "knotx.knot.action"
+    },
+    {
+      "alias": "HttpServiceAdapter",
+      "value": "knotx.adapter.service.http"
+    },
+    {
+      "alias": "HandlebarsKnot",
+      "value": "knotx.knot.handlebars"
+    }
+  ]
+}

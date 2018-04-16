@@ -54,7 +54,17 @@ Do the following steps to start sending Knot.x application metrics to Graphite:
 METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dw"
 ```
 * Optionally configure other metrics sender parameters in `conf/dashboardStack.conf`
-
+* Optionally configure metrics to gather event-bus data:
+  - copy `conf/metrics-options.json` to `conf` directory of Knot.x instance
+  - append `METRICS_OPTS` in `bin/knotx` with `-Dvertx.metrics.options.configPath=conf/metrics-options.json`
+  - define datasource endpoint entries in `monitoredHttpClientEndpoints` section to monitor its traffic, e.g.
+  ```json
+      {
+        "alias": "googleapis",
+        "value": "www.googleapis.com:443"
+      }
+  ```
+  - for more information about metrics settings see [vertx-dropwizard-metrics docs](https://github.com/vert-x3/vertx-dropwizard-metrics/blob/master/src/main/asciidoc/java/index.adoc)
 
 #### Gathering and displaying metrics
 Before running Knot.x with metrics you need a Graphite instance that metrics will be pushed to.

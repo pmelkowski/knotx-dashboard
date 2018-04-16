@@ -17,6 +17,16 @@ public class GraphiteOptions {
     GraphiteOptionsConverter.fromJson(config, this);
   }
 
+  public GraphiteOptions setAddress(String address) {
+    this.address = address;
+    return this;
+  }
+
+  public GraphiteOptions setPort(int port) {
+    this.port = port;
+    return this;
+  }
+
   public String getAddress() {
     return address;
   }

@@ -29,6 +29,21 @@ public class MetricsSenderOptions {
     pollsPeriod = DEFAULT_POLLS_PERIOD_MS;
   }
 
+  public MetricsSenderOptions setGraphite(GraphiteOptions graphite) {
+    this.graphite = graphite;
+    return this;
+  }
+
+  public MetricsSenderOptions setPrefix(String prefix) {
+    this.prefix = prefix;
+    return this;
+  }
+
+  public MetricsSenderOptions setPollsPeriod(int pollsPeriod) {
+    this.pollsPeriod = pollsPeriod;
+    return this;
+  }
+
   public GraphiteOptions getGraphite() {
     return graphite;
   }

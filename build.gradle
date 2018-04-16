@@ -23,7 +23,7 @@ ext {
 
 allprojects {
     group 'io.knotx'
-    version '1.0-SNAPSHOT'
+    version '1.0.0-SNAPSHOT'
 
     repositories {
         maven { url "https://oss.sonatype.org/content/groups/staging/" }

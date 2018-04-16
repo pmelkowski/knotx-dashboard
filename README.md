@@ -40,7 +40,7 @@ Do the following steps to start sending Knot.x application metrics to Graphite:
     
       {
         "type": "file",
-        "formant": "conf",
+        "format": "conf",
         "config": {
           "path": "${KNOTX_HOME}/conf/dashboardStack.conf"
         }

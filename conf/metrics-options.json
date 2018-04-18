@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "registryName": "knotx-dw",
+  "registryName": "knotx-dropwizard-registry",
   "monitoredHttpClientEndpoints": [ ],
   "monitoredEventBusHandlers": [
     {

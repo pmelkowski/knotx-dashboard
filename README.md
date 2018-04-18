@@ -51,7 +51,7 @@ Do the following steps to start sending Knot.x application metrics to Graphite:
 * Define Graphite connection in `conf/dashboardStack.conf` (by default it's set to `localhost:2003`).
 * Uncomment `METRICS_OPTS` line in `bin/knotx`:
 ```cmd
-METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dw"
+METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dropwizard-registry"
 ```
 * Optionally configure other metrics sender parameters in `conf/dashboardStack.conf`
 * Optionally configure metrics to gather event-bus data:

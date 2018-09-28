@@ -21,39 +21,32 @@ Do the following steps to start sending Knot.x application metrics to Graphite:
 ```json
     {
       "groupId": "io.knotx",
-      "artifactId": "metrics-sender",
+      "artifactId": "knotx-dashboard",
       "version": "X.Y.Z",
       "included": true
     }
 ```
 * Run `bin\knotx resolve` to resolve new dependencies and add `metrics-sender` to the instance classpath
-* Add `metrics-sender` entry to `application.conf` modules list
+* Add `metricSender` entry to `application.conf` modules list
 ```
 "metricsSender=io.knotx.metrics.SenderVerticle"
 ```
-* Copy `conf/dashboardStack.conf` to application `conf` folder
-* Add `dashboardStack.conf` to application stores defined in `bootstrap.json`, e.g.
-```json
-...
-    "stores": [
-      ...
-    
-      {
-        "type": "file",
-        "format": "conf",
-        "config": {
-          "path": "${KNOTX_HOME}/conf/dashboardStack.conf"
-        }
-      }
-    ]
-...
+* Add `metricSender` entry to `application.conf` modules configuration
 ```
+config.metricsSender {
+  options.config {
+    include required("includes/metricsSender.conf")
+  }
+}
+```
+* Copy `conf/metricsSender.conf` to application `conf/includes` folder
 * Define Graphite connection in `conf/dashboardStack.conf` (by default it's set to `localhost:2003`).
 * Uncomment `METRICS_OPTS` line in `bin/knotx`:
 ```cmd
 METRICS_OPTS="-Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=knotx-dropwizard-registry"
 ```
-* Optionally configure other metrics sender parameters in `conf/dashboardStack.conf`
+* Optionally add -Dknotx.metrics.options.prefix=<custom prefix> to `METRICS_OPTS`
+* Optionally configure other metrics sender parameters in `conf/includes/metricsSender.conf`
 * Optionally configure metrics to gather event-bus data:
   - copy `conf/metrics-options.json` to `conf` directory of Knot.x instance
   - append `METRICS_OPTS` in `bin/knotx` with `-Dvertx.metrics.options.configPath=conf/metrics-options.json`

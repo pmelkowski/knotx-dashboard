@@ -30,7 +30,6 @@ public class SenderVerticle extends AbstractVerticle {
   @Override
   public void start() throws Exception {
     LOGGER.info("Starting <{}>", this.getClass().getSimpleName());
-    LOGGER.debug("Metrics config: {}", options);
 
     MetricRegistry dropwizardRegistry = SharedMetricRegistries.getOrCreate(
         System.getProperty("vertx.metrics.options.registryName")
@@ -39,7 +38,7 @@ public class SenderVerticle extends AbstractVerticle {
     final Graphite graphite = new Graphite(
         new InetSocketAddress(graphiteOptions.getAddress(), graphiteOptions.getPort()));
     final GraphiteReporter reporter = GraphiteReporter.forRegistry(dropwizardRegistry)
-        .prefixedWith(options.getPrefix())
+        .prefixedWith(System.getProperty("knotx.metrics.options.prefix", options.getPrefix()))
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)
         .filter(MetricFilter.ALL)

@@ -1,0 +1,28 @@
+
+apply plugin: 'maven-publish'
+
+subprojects {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+            }
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username project.findProperty('ossrhUsername') ? "${ossrhUsername}" : "NOT_CONFIGURED"
+                password project.findProperty('ossrhPassword') ? "${ossrhPassword}" : "NOT_CONFIGURED"
+
+                println "Connecting with user: ${username}"
+            }
+        }
+    }
+}

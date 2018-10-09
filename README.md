@@ -31,15 +31,23 @@ Do the following steps to start sending Knot.x application metrics to Graphite:
 ```
 "metricsSender=io.knotx.metrics.SenderVerticle"
 ```
-* Add `metricSender` entry to `application.conf` modules configuration
+* Copy `conf/dashboardStack.conf` to application `conf` folder
+* Add `dashboardStack.conf` to application stores defined in `bootstrap.json`, e.g.
+```json
+...
+    "stores": [
+      ...
+    
+      {
+        "type": "file",
+        "format": "conf",
+        "config": {
+          "path": "${KNOTX_HOME}/conf/dashboardStack.conf"
+        }
+      }
+    ]
+...
 ```
-config.metricsSender {
-  options.config {
-    include required("includes/metricsSender.conf")
-  }
-}
-```
-* Copy `conf/metricsSender.conf` to application `conf/includes` folder
 * Define Graphite connection in `conf/dashboardStack.conf` (by default it's set to `localhost:2003`).
 * Uncomment `METRICS_OPTS` line in `bin/knotx`:
 ```cmd

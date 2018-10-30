@@ -21,6 +21,8 @@ public class SenderVerticle extends AbstractVerticle {
 
   private MetricsSenderOptions options;
 
+  private GraphiteReporter reporter;
+
   @Override
   public void init(Vertx vertx, Context context) {
     super.init(vertx, context);
@@ -38,7 +40,7 @@ public class SenderVerticle extends AbstractVerticle {
     final GraphiteOptions graphiteOptions = options.getGraphite();
     final Graphite graphite = new Graphite(
         new InetSocketAddress(graphiteOptions.getAddress(), graphiteOptions.getPort()));
-    final GraphiteReporter reporter = GraphiteReporter.forRegistry(dropwizardRegistry)
+    reporter = GraphiteReporter.forRegistry(dropwizardRegistry)
         .prefixedWith(options.getPrefix())
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)
@@ -49,6 +51,8 @@ public class SenderVerticle extends AbstractVerticle {
 
   @Override
   public void stop() throws Exception {
-    //Nothing to do
+    if (reporter != null) {
+      reporter.stop();
+    }
   }
 }

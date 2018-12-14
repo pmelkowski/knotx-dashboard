@@ -19,6 +19,9 @@ public class SenderVerticle extends AbstractVerticle {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SenderVerticle.class);
 
+  private static final String REGISTRY_PROPERTY = "vertx.metrics.options.registryName";
+  private static final String PREFIX_PROPERTY = "knotx.metrics.options.prefix";
+
   private MetricsSenderOptions options;
 
   private GraphiteReporter reporter;
@@ -32,16 +35,19 @@ public class SenderVerticle extends AbstractVerticle {
   @Override
   public void start() throws Exception {
     LOGGER.info("Starting <{}>", this.getClass().getSimpleName());
-    LOGGER.debug("Metrics config: {}", options);
 
-    MetricRegistry dropwizardRegistry = SharedMetricRegistries.getOrCreate(
-        System.getProperty("vertx.metrics.options.registryName")
-    );
+    final String registryName = System.getProperty(REGISTRY_PROPERTY);
+    if (registryName == null) {
+      LOGGER.error("Property '{}' not set. Exiting.", REGISTRY_PROPERTY);
+      return;
+    }
+
+    MetricRegistry dropwizardRegistry = SharedMetricRegistries.getOrCreate(registryName);
     final GraphiteOptions graphiteOptions = options.getGraphite();
     final Graphite graphite = new Graphite(
         new InetSocketAddress(graphiteOptions.getAddress(), graphiteOptions.getPort()));
     reporter = GraphiteReporter.forRegistry(dropwizardRegistry)
-        .prefixedWith(options.getPrefix())
+        .prefixedWith(System.getProperty(PREFIX_PROPERTY, options.getPrefix()))
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)
         .filter(MetricFilter.ALL)

@@ -5,8 +5,8 @@ import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.graphite.Graphite;
-import com.codahale.metrics.graphite.GraphiteReporter;
 import io.knotx.metrics.graphite.GraphiteOptions;
+import io.knotx.metrics.graphite.GraphiteReporter;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
@@ -40,7 +40,7 @@ public class SenderVerticle extends AbstractVerticle {
     final GraphiteOptions graphiteOptions = options.getGraphite();
     final Graphite graphite = new Graphite(
         new InetSocketAddress(graphiteOptions.getAddress(), graphiteOptions.getPort()));
-    reporter = GraphiteReporter.forRegistry(dropwizardRegistry)
+    reporter = GraphiteReporter.useRegistry(dropwizardRegistry)
         .prefixedWith(options.getPrefix())
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)

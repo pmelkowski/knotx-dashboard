@@ -22,7 +22,7 @@ configure(rootProject) {
 }
 
 ext {
-    knotxVersion = '1.4.0-SNAPSHOT'
+    knotxVersion = '1.4.0'
 }
 
 allprojects {

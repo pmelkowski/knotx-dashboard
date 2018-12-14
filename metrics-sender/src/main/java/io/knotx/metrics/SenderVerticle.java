@@ -38,7 +38,7 @@ public class SenderVerticle extends AbstractVerticle {
 
     final String registryName = System.getProperty(REGISTRY_PROPERTY);
     if (registryName == null) {
-      LOGGER.warn("Property '{}' not set. Exiting.", REGISTRY_PROPERTY);
+      LOGGER.error("Property '{}' not set. Exiting.", REGISTRY_PROPERTY);
       return;
     }
 

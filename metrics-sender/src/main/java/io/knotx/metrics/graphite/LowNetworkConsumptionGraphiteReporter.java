@@ -17,9 +17,9 @@
 /*
  * This code was partially copied from metrics-graphite project by Coda Hale, Yammer Inc.
  * The copied code:
- *      GraphiteReporter.Builder class and its methods
+ *      Builder class and its methods
  * The new code:
- *      GraphiteReporter's overridden and new methods
+ *      report() and removeRepeating() methods
  */
 package io.knotx.metrics.graphite;
 
@@ -45,22 +45,23 @@ import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.graphite.Graphite;
+import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.graphite.GraphiteSender;
 
-public class GraphiteReporter extends com.codahale.metrics.graphite.GraphiteReporter {
+public class LowNetworkConsumptionGraphiteReporter extends GraphiteReporter {
 
   /**
-   * Returns a new {@link Builder} for {@link GraphiteReporter}.
+   * Returns a new {@link Builder} for {@link LowNetworkConsumptionGraphiteReporter}.
    *
    * @param registry the registry to report
-   * @return a {@link Builder} instance for a {@link GraphiteReporter}
+   * @return a {@link Builder} instance for a {@link LowNetworkConsumptionGraphiteReporter}
    */
   public static Builder useRegistry(MetricRegistry registry) {
       return new Builder(registry);
   }
 
   /**
-   * A builder for {@link GraphiteReporter} instances. Defaults to not using a prefix, using the
+   * A builder for {@link LowNetworkConsumptionGraphiteReporter} instances. Defaults to not using a prefix, using the
    * default clock, converting rates to events/second, converting durations to milliseconds, and
    * not filtering metrics.
    */
@@ -181,27 +182,27 @@ public class GraphiteReporter extends com.codahale.metrics.graphite.GraphiteRepo
       }
 
       /**
-       * Builds a {@link GraphiteReporter} with the given properties, sending metrics using the
+       * Builds a {@link LowNetworkConsumptionGraphiteReporter} with the given properties, sending metrics using the
        * given {@link GraphiteSender}.
        * <p>
        * Present for binary compatibility
        *
        * @param graphite a {@link Graphite}
-       * @return a {@link GraphiteReporter}
+       * @return a {@link LowNetworkConsumptionGraphiteReporter}
        */
-      public GraphiteReporter build(Graphite graphite) {
+      public LowNetworkConsumptionGraphiteReporter build(Graphite graphite) {
           return build((GraphiteSender) graphite);
       }
 
       /**
-       * Builds a {@link GraphiteReporter} with the given properties, sending metrics using the
+       * Builds a {@link LowNetworkConsumptionGraphiteReporter} with the given properties, sending metrics using the
        * given {@link GraphiteSender}.
        *
        * @param graphite a {@link GraphiteSender}
-       * @return a {@link GraphiteReporter}
+       * @return a {@link LowNetworkConsumptionGraphiteReporter}
        */
-      public GraphiteReporter build(GraphiteSender graphite) {
-          return new GraphiteReporter(registry,
+      public LowNetworkConsumptionGraphiteReporter build(GraphiteSender graphite) {
+          return new LowNetworkConsumptionGraphiteReporter(registry,
                   graphite,
                   clock,
                   prefix,
@@ -221,7 +222,7 @@ public class GraphiteReporter extends com.codahale.metrics.graphite.GraphiteRepo
   private Map<String, Long> lastTimers;
 
   /**
-   * Creates a new {@link GraphiteReporter} instance.
+   * Creates a new {@link LowNetworkConsumptionGraphiteReporter} instance.
    *
    * @param registry               the {@link MetricRegistry} containing the metrics this
    *                               reporter will report
@@ -235,7 +236,7 @@ public class GraphiteReporter extends com.codahale.metrics.graphite.GraphiteRepo
    * @param executor               the executor to use while scheduling reporting of metrics (may be null).
    * @param shutdownExecutorOnStop if true, then executor will be stopped in same time with this reporter
    */
-  public GraphiteReporter(MetricRegistry registry, GraphiteSender graphite, Clock clock,
+  private LowNetworkConsumptionGraphiteReporter(MetricRegistry registry, GraphiteSender graphite, Clock clock,
       String prefix, TimeUnit rateUnit, TimeUnit durationUnit, MetricFilter filter,
       ScheduledExecutorService executor, boolean shutdownExecutorOnStop,
       Set<MetricAttribute> disabledMetricAttributes) {
